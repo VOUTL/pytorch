@@ -3350,7 +3350,7 @@ def multi_head_attention_forward(query,                           # type: Tensor
         if attn_mask.dim() == 2:
             attn_mask = attn_mask.unsqueeze(0)
         elif attn_mask.dim() == 3:
-            if list(attn_mask.size()) != [bsz * num_heads, query.size(0), key.size(0)]:
+            if list(attn_mask.size()) != [bsz, query.size(0), key.size(0)]:
                 raise ValueError('The size of the 3D attn_mask is not correct.')
             # [N, L, S] -> [N*H, L, S]
             attn_mask = torch.repeat_interleave(attn_mask, num_heads, dim=0)
