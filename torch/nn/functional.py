@@ -3243,7 +3243,7 @@ def multi_head_attention_forward(query,                           # type: Tensor
           the embedding dimension.
         - key_padding_mask: :math:`(N, S)`, ByteTensor, where N is the batch size, S is the source sequence length.
         - attn_mask: 2D mask :math:`(L, S)` where L is the target sequence length, S is the source sequence length.
-          3D mask :math:`(N*num_heads, L, S)` where N is the batch size, L is the target sequence length,
+          3D mask :math:`(N, L, S)` where N is the batch size, L is the target sequence length,
           S is the source sequence length.
         - static_k: :math:`(N*num_heads, S, E/num_heads)`, where S is the source sequence length,
           N is the batch size, E is the embedding dimension. E/num_heads is the head dimension.
@@ -3352,6 +3352,8 @@ def multi_head_attention_forward(query,                           # type: Tensor
         elif attn_mask.dim() == 3:
             if list(attn_mask.size()) != [bsz * num_heads, query.size(0), key.size(0)]:
                 raise ValueError('The size of the 3D attn_mask is not correct.')
+            # [N, L, S] -> [N*H, L, S]
+            attn_mask = torch.repeat_interleave(attn_mask, num_heads, dim=0)
         else:
             raise ValueError("attn_mask's dimension {} is not supported".format(attn_mask.dim()))
         # attn_mask's dim is 3 now.

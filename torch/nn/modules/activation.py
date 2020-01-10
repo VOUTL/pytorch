@@ -791,7 +791,7 @@ class MultiheadAttention(Module):
           the embedding dimension.
         - key_padding_mask: :math:`(N, S)`, ByteTensor, where N is the batch size, S is the source sequence length.
         - attn_mask: 2D mask :math:`(L, S)` where L is the target sequence length, S is the source sequence length.
-          3D mask :math:`(N*num_heads, L, S)` where N is the batch size, L is the target sequence length,
+          3D mask :math:`(N, L, S)` where N is the batch size, L is the target sequence length,
           S is the source sequence length.
 
         - Outputs:

@@ -3496,7 +3496,7 @@ class TestNN(NNTestCase):
         mta_model = torch.nn.MultiheadAttention(embed_dim, num_heads)
         attn_mask_2d = torch.randint(0, 2, (tgt_len, src_len)).float()
         attn_mask_2d = attn_mask_2d.masked_fill(attn_mask_2d == 0, float('-inf')).masked_fill(attn_mask_2d == 1, float(0.0)) 
-        attn_mask_3d = torch.stack([attn_mask_2d] * (batch_size * num_heads), dim=0)
+        attn_mask_3d = torch.stack([attn_mask_2d] * (batch_size), dim=0)
         self.assertEqual(mta_model(query, key, value, attn_mask=attn_mask_2d)[0],
                          mta_model(query, key, value, attn_mask=attn_mask_3d)[0])
 
